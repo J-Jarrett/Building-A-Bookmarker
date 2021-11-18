@@ -179,7 +179,8 @@ function fetchBookmarks() {
 
     // 7. Add event listener for Delete button:
     document.querySelector(".delete").addEventListener("click", deleteBookmark);
-    
+    // Trickier than it looks.
+    // Think hard: this is a class of <a>, within a parent <h3>, within a parent <div>; we did this a little while ago in.... 
 
     
 } // end function fetchBookmarks()
