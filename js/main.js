@@ -22,6 +22,10 @@ window.addEventListener('DOMContentLoaded', fetchBookmarks);
 
 document.querySelector('#myForm').addEventListener("submit", saveBookmark);
 
+
+
+
+
 // 2. Create function for event listener action
 
 // function saveBookmark(e) {
@@ -104,6 +108,32 @@ function saveBookmark(e) {
 
 } // end function saveBookmark(e)
 
+// 7. Create Delete bookmarks function
+
+function deleteBookmark(url) {
+    
+    // get bookmarks from local storage:
+    const bookmarks=JSON.parse(localStorage.getItem('bookmarks'));
+    // loop through bookmarks:
+    // bookmarks.forEach(bookmark => {
+    //     if (bookmark.url===url) bookmarks.splice(bookmark,1);
+    // })
+        // NOPE. TRY AGAIN.
+    for(i=0; i<bookmarks.length; i++) {
+        if(bookmarks[i].url===url) {
+            // remove from array
+            bookmarks.splice(i, 1);
+        }
+    }
+
+    // Reset back to local storage:
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+    fetchBookmarks();
+
+}
+
+
+
 // 6. Display bookmarks
 
 function fetchBookmarks() {
@@ -118,14 +148,42 @@ function fetchBookmarks() {
     const bookmarksResults = document.querySelector('#bookmarksResults');
 
     // Build output TEST:
-    bookmarksResults.innerHTML = "Hello";
+    // bookmarksResults.innerHTML = "Hello";
         // Save, run - see it works! we have "Hello" under the form!
         // So we managed to pass some HTML to that spot through JavaScript.
         // Next: change .innerHTML to an empty string; loop thru bookmarks array and output them by name and URL one by one, then put them inside a div.
+
+    // Build output:
+    bookmarksResults.innerHTML = "";
+    // `<div class="container"><div class="row align-items-start">`;
+    // Loop thru bookmarks and concat to innerHTML:
+    bookmarks.forEach(bookmark => {
+        const name = bookmark.name;
+        const url = bookmark.url;
+        // test
+        // bookmarksResults.innerHTML+=name;
+        // So this test run gives us "GoogleBootstrapJigsawsCSS Tricks" in the browser under the form. Need to format these.
+        // Side note: used forEach instead of a for loop here.
+
+        // bookmarksResults.innerHTML+=`<div class="card mt-1 px-3"><h3>${name}</h3></div>`;
+            // good-ish; Now we need to add buttons, which will be links to take us to the websites, and more links for deleting the shortcut.
+
+            bookmarksResults.innerHTML+=`<div class="card card-body mb-1"><h3>${name} <a class="btn btn-primary" target="_blank" href="${url}">Visit</a> <a class="btn btn-danger delete" href="#">Delete</a></h3></div>`;
+
+            // original tutorial used '<a onclick="deleteBookmark(\''+url+'\')"> in there as well; onclick now deprecated for eventListener, need to remember to add eventListener for class delete, which I've added in above.
+
+        // Well, it could look better. Must look at that sometime. Moving on to create deleteBookmark(), between saveBookmark() and fetchBookmark()
+
+    });
+    // bookmarksResults.innerHTML+=`</div></div>`;
+
+    // 7. Add event listener for Delete button:
+    document.querySelector(".delete").addEventListener("click", deleteBookmark);
     
+
     
 } // end function fetchBookmarks()
 
-// 7. Create Delete bookmarks function
+
 // 8. Validate inputs
 // 9. Clear form fields after submit.
